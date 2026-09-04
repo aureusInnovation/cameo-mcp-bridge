@@ -1,0 +1,13 @@
+# cameo-mcp-bridge
+
+Python MCP server and Java Cameo plugin. Read README.md and the relevant docs/ before modifying the bridge contract.
+
+- Python implementation is under mcp-server/; Java implementation and Gradle build are under plugin/.
+- Keep capability negotiation and client/plugin version compatibility explicit.
+- Preserve dry-run defaults, guarded writes, and model transaction boundaries.
+- Use the relevant component's declared tests. Building the Java plugin requires the local Cameo libraries described in README.md; report missing prerequisites.
+- Do not mutate a running Cameo model or install/restart its plugin as a side effect of code validation.
+
+## Instruction maintenance
+
+Edit .ruler/AGENTS.md and preview/sync with the Ruler Codex wrapper.
