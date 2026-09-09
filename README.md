@@ -73,8 +73,8 @@ All write operations are session-wrapped for undo/redo support. Read operations 
 
 ## Prerequisites
 
-- **CATIA Magic / Cameo Systems Modeler** 2024x or newer (any bundle: Systems of Systems Architect, Cyber Systems Engineer, etc.)
-- **Java 17 JDK** available to Gradle
+- **CATIA Magic / Cameo Systems Modeler** 2024x or newer (any bundle: Systems of Systems Architect, Cyber Systems Engineer, etc.), **or Cameo Systems Modeler 2022x Refresh 2** on the `dev/2022x-bridge` branch
+- **A Java 17 JDK** available to run Gradle. The plugin itself compiles to **Java 11 bytecode** on `dev/2022x-bridge` (`sourceCompatibility`/`targetCompatibility`/`options.release` = `11` in `plugin/build.gradle`), matching the embedded Java 11 JRE that ships with Cameo 2022x; a Java 17 (or newer) compiler can cross-compile to that target fine, it doesn't need to match the runtime version
 - **Python 3.10+** with `pip`
 - **Gradle 8.x** (wrapper included)
 
@@ -111,7 +111,7 @@ cd plugin
 ./gradlew assemblePlugin -PcameoHome="/path/to/CatiaMagic" -Pjdk17Home="/path/to/jdk-17"
 ```
 
-Gradle must run on a Java 17 JDK. You can also set `JDK17_HOME` or `JAVA17_HOME` instead of passing `-Pjdk17Home=...`.
+Gradle must run on a Java 17 JDK. You can also set `JDK17_HOME` or `JAVA17_HOME` instead of passing `-Pjdk17Home=...`. This only controls which JDK *runs* the compiler — on `dev/2022x-bridge` the compiled bytecode still targets Java 11 (see Compatibility below), so a JDK 17 compiler here works whether you're building against a 2022x or 2024x install.
 
 **2. Deploy to Cameo:**
 
@@ -541,6 +541,7 @@ The bridge builds models correctly -- elements, relationships, directionality, s
 ### Compatibility
 - Tested with CATIA Magic Systems of Systems Architect 2024x
 - Should work with any Cameo Systems Modeler 2024x bundle (2024x+)
+- **The `dev/2022x-bridge` branch is tested with Cameo Systems Modeler 2022x Refresh 2** (embedded Java 11 JRE); see `CLAUDE.md` and `docs/development/2022x-windows-portability.md` for the specific build-target and plugin-version changes that branch carries versus `master`. A small number of native APIs (e.g. `DiagramPresentationElement.getSelectedPresentationElements`/`getSelectedElements`) are 2024x-only and degrade to a reported `unavailable` warning on 2022x rather than failing outright.
 - Requires Groovy script engine (bundled with Cameo) for macro execution
 - The Gradle build requires access to Cameo's `lib/` directory for compile-time dependencies
 
