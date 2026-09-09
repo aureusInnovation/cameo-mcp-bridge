@@ -422,8 +422,8 @@ public class DiagramHandler implements HttpHandler {
 
     private Element resolveElement(Project project, String elementId, String label) {
         Object element = project.getElementByID(elementId);
-        if (element instanceof Element resolved) {
-            return resolved;
+        if (element instanceof Element) {
+            return (Element) element;
         }
         throw new IllegalArgumentException(label + " not found: " + elementId);
     }

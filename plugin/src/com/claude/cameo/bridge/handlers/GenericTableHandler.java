@@ -239,7 +239,9 @@ public class GenericTableHandler implements HttpHandler {
         if (diagram != null && diagram.getOwner() instanceof Element) {
             Element owner = (Element) diagram.getOwner();
             json.addProperty("ownerId", owner.getID());
-            if (owner instanceof com.nomagic.uml2.ext.magicdraw.classes.mdkernel.NamedElement namedOwner) {
+            if (owner instanceof com.nomagic.uml2.ext.magicdraw.classes.mdkernel.NamedElement) {
+                com.nomagic.uml2.ext.magicdraw.classes.mdkernel.NamedElement namedOwner =
+                        (com.nomagic.uml2.ext.magicdraw.classes.mdkernel.NamedElement) owner;
                 json.addProperty("ownerName", namedOwner.getName());
             }
         }
@@ -252,16 +254,16 @@ public class GenericTableHandler implements HttpHandler {
 
     private Diagram resolveDiagram(com.nomagic.magicdraw.core.Project project, String tableId) {
         Object element = project.getElementByID(tableId);
-        if (element instanceof Diagram diagram) {
-            return diagram;
+        if (element instanceof Diagram) {
+            return (Diagram) element;
         }
         throw new IllegalArgumentException("Generic Table not found: " + tableId);
     }
 
     private Element resolveElement(com.nomagic.magicdraw.core.Project project, String elementId, String label) {
         Object element = project.getElementByID(elementId);
-        if (element instanceof Element resolved) {
-            return resolved;
+        if (element instanceof Element) {
+            return (Element) element;
         }
         throw new IllegalArgumentException(label + " not found: " + elementId);
     }
@@ -287,8 +289,8 @@ public class GenericTableHandler implements HttpHandler {
 
     private Element resolveTypeElement(com.nomagic.magicdraw.core.Project project, String typeName) {
         Object type = resolveTypeReference(project, typeName);
-        if (type instanceof Element element) {
-            return element;
+        if (type instanceof Element) {
+            return (Element) type;
         }
         throw new IllegalArgumentException("Could not resolve type element: " + typeName);
     }
